@@ -39,7 +39,7 @@ We want to make it obvious at a glance which tasks are the really crucial ones. 
 
 Our users are keen to be able to add point values to tasks with a natural language style input. When a user inputs a task name they should be able to say, for example, 'do stuff 10pts' and have a task added of the form `{name: 'do stuff', points: 10}`.
 
-## Design requests
+## [Optional] Design requests
 
 Design has a few things they'd like to see changed before this goes out!
 
@@ -47,7 +47,3 @@ Design has a few things they'd like to see changed before this goes out!
 - Make the TODO heading more prominant, bigger and bolder.
 - Add a light grey to the background behind the card.
 - Vertically centre align the Add button and text field.
-
-## Finally
-
-Ensure all elements are semantically correct.
