@@ -1,55 +1,66 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import { mount } from 'enzyme';
+import { fireEvent, render, screen } from "@testing-library/react";
+import App from "./App";
 
-const stateFixture = {
-  newTask: 'eat the frog 20pts',
-  tasks: [
-    {name: 'kill bill', points: 6},
-    {name: 'get shorty', points: 12},
+const defaultProps = {
+  initialNewTask: "eat the frog 20pts",
+  initialTasks: [
+    { name: "kill bill", points: 6 },
+    { name: "get shorty", points: 12 },
   ],
+  onState: jest.fn(),
 };
 
-describe('<App />', () => {
-  let wrapper;
-
-  beforeEach(() => {
-    wrapper = mount(<App
-      initialState={stateFixture}
-    />);
-  })
-
-  it('renders without crashing', () => {
-    const div = document.createElement('div');
-    ReactDOM.render(<App />, div);
-    ReactDOM.unmountComponentAtNode(div);
+describe("<App />", () => {
+  it("renders without crashing", () => {
+    render(<App {...defaultProps} />);
+    expect(screen.getByText("TODO")).toBeInTheDocument();
   });
 
-  it('renders the task names', () => {
-    const text = wrapper.text();
+  it("renders the task names", () => {
+    render(<App {...defaultProps} />);
 
-    expect(text).toMatch(/kill bill/);
-    expect(text).toMatch(/get shorty/);
+    expect(screen.getByText("kill bill")).toBeInTheDocument();
+    expect(screen.getByText("get shorty")).toBeInTheDocument();
   });
 
-  it('sorts tasks by descending point value', () => {
-    const text = wrapper.text();
-    expect(text.indexOf('get shorty')).toBeLessThan(text.indexOf('kill bill'));
+  it("sorts tasks by descending point value", () => {
+    const { container } = render(<App {...defaultProps} />);
+
+    const items = container.getElementsByTagName("li");
+
+    expect(items[0]).toHaveTextContent("get shorty");
+    expect(items[1]).toHaveTextContent("kill bill");
   });
 
-  it('renders the correct class for the point threshold', () => {
-    const critical = wrapper.find('.critical').hostNodes();
-    expect(critical.text()).toMatch(/get shorty/);
+  it("renders the correct class for the point threshold", () => {
+    const { container } = render(<App {...defaultProps} />);
 
-    const normal = wrapper.find('.normal').hostNodes();
-    expect(normal.text()).toMatch(/kill bill/);
+    const criticalItems = container.getElementsByClassName("critical");
+    const normalItems = container.getElementsByClassName("normal");
+
+    expect(criticalItems.length).toEqual(1);
+    expect(normalItems.length).toEqual(1);
   });
 
-  it('parses point input in the task name', () => {
-    expect(wrapper.state().tasks.length).toEqual(2);
-    wrapper.find('form#addtask').first().simulate('submit');
-    expect(wrapper.state().tasks.length).toEqual(3);
-    expect(wrapper.state().tasks[2].points).toEqual(20);
+  it("parses point input in the task name", () => {
+    const { container } = render(<App {...defaultProps} />);
+
+    const items = container.getElementsByTagName("li");
+    expect(items.length).toEqual(2);
+
+    const submitButton = screen.getByRole("button", { name: /Add/i });
+    fireEvent.click(submitButton);
+
+    expect(items.length).toEqual(3);
+
+    const expectedOutput = [
+      ...defaultProps.initialTasks,
+      { name: "eat the frog", points: 20 },
+    ];
+
+    expect(defaultProps.onState).toBeCalledWith(
+      expectedOutput,
+      "eat the frog 20pts"
+    );
   });
 });

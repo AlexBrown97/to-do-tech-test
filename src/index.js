@@ -1,24 +1,28 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import registerServiceWorker from "./registerServiceWorker";
 
-const store = (_, state) => {
-  window.localStorage.state = JSON.stringify(state);
-}
+const store = (tasks, newTask) => {
+  window.localStorage.tasks = JSON.stringify(tasks);
+  window.localStorage.newTask = JSON.stringify(newTask);
+};
 
-const retrieve = () => {
+const retrieve = (key) => {
   try {
-    return JSON.parse(window.localStorage.state);
+    return JSON.parse(window.localStorage[key]);
   } catch (e) {
-    return {};
+    return undefined;
   }
-}
+};
 
-
-ReactDOM.render(<App
-  initialState={retrieve()}
-  onState={store}
-  />, document.getElementById('root'));
+ReactDOM.render(
+  <App
+    initialNewTask={retrieve("newTask")}
+    initialTasks={retrieve("tasks")}
+    onState={store}
+  />,
+  document.getElementById("root")
+);
 registerServiceWorker();
