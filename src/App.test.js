@@ -2,7 +2,6 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import App from "./App";
 
 const defaultProps = {
-  initialNewTask: "eat the frog 20pts",
   initialTasks: [
     { name: "kill bill", points: 6 },
     { name: "get shorty", points: 12 },
@@ -48,6 +47,9 @@ describe("<App />", () => {
     const items = container.getElementsByTagName("li");
     expect(items.length).toEqual(2);
 
+    const input = container.getElementsByTagName("input")[0];
+    fireEvent.change(input, { target: { value: "eat the frog 20pts" } });
+
     const submitButton = screen.getByRole("button", { name: /Add/i });
     fireEvent.click(submitButton);
 
@@ -58,9 +60,6 @@ describe("<App />", () => {
       { name: "eat the frog", points: 20 },
     ];
 
-    expect(defaultProps.onState).toBeCalledWith(
-      expectedOutput,
-      "eat the frog 20pts"
-    );
+    expect(defaultProps.onStateChange).toBeCalledWith(expectedOutput);
   });
 });
