@@ -24,11 +24,7 @@ const App = ({ initialTasks = [], onState }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const newTasks = [...tasks, { name: newTask }];
-    setTasks(newTasks);
-    onState?.(newTasks);
-
-    setNewTask("");
+    setTasks([...tasks, { name: newTask }]);
   };
 
   const handleChange = (event) => {
@@ -37,10 +33,13 @@ const App = ({ initialTasks = [], onState }) => {
 
   const deleteItem = (index) => (event) => {
     event.preventDefault();
-    const taskList = [...tasks];
-    taskList.splice(index, 1);
-    setTasks(taskList);
+    setTasks([...tasks].splice(index, 1));
   };
+
+  useEffect(() => {
+    onState?.(tasks);
+    setNewTask("");
+  }, [tasks]);
 
   return (
     <Container maxWidth="sm">
