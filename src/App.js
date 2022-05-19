@@ -19,7 +19,8 @@ import TextField from "@mui/material/TextField";
 import "./App.css";
 
 const App = ({ initialTasks, initialNewTask, onState }) => {
-  const [tasks, setTasks] = useState(initialTasks || []);
+const App = ({ initialTasks = [], initialNewTask, onState }) => {
+  const [tasks, setTasks] = useState(initialTasks);
   const [newTask, setNewTask] = useState(initialNewTask);
 
   const handleSubmit = (event) => {
