@@ -41,7 +41,7 @@ const App = ({ initialTasks = [], initialNewTask, onState }) => {
   };
 
   useEffect(() => {
-    onState(tasks, newTask);
+    onState?.(tasks, newTask);
   }, [tasks, newTask]);
 
   return (
