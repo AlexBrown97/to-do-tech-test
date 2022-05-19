@@ -4,7 +4,7 @@ Todo is a little app. It's based on create-react-app and material-ui.
 
 ## Setup
 
-To run this project you must have Node.js and NPM installed.
+To run this project you must have Node.js (v16+) and NPM installed.
 
 To get started, run these commands:
 
