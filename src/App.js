@@ -18,28 +18,30 @@ import TextField from "@mui/material/TextField";
 
 import "./App.css";
 
-const App = ({ initialTasks = [], onState }) => {
+const App = ({ initialTasks = [], onStateChange }) => {
   const [tasks, setTasks] = useState(initialTasks);
   const [newTask, setNewTask] = useState("");
 
+  const updateTasks = (updatedTasks) => {
+    setTasks(updatedTasks);
+    onStateChange?.(updatedTasks);
+
+    setNewTask("");
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    setTasks([...tasks, { name: newTask }]);
+    updateTasks([...tasks, { name: newTask }]);
   };
 
   const handleChange = (event) => {
     setNewTask(event.target.value);
   };
 
-  const deleteItem = (index) => (event) => {
+  const handleDeleteItem = (index) => (event) => {
     event.preventDefault();
-    setTasks([...tasks].splice(index, 1));
+    updateTasks([...tasks].splice(index, 1));
   };
-
-  useEffect(() => {
-    onState?.(tasks);
-    setNewTask("");
-  }, [tasks]);
 
   return (
     <Container maxWidth="sm">
@@ -64,7 +66,7 @@ const App = ({ initialTasks = [], onState }) => {
                     <IconButton
                       type="button"
                       aria-label="Delete"
-                      onClick={deleteItem(i)}
+                      onClick={handleDeleteItem(i)}
                     >
                       <DeleteIcon />
                     </IconButton>
