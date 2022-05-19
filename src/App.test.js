@@ -7,7 +7,7 @@ const defaultProps = {
     { name: "kill bill", points: 6 },
     { name: "get shorty", points: 12 },
   ],
-  onState: jest.fn(),
+  onStateChange: jest.fn(),
 };
 
 describe("<App />", () => {
