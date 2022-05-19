@@ -39,6 +39,9 @@ describe("<App />", () => {
 
     expect(criticalItems.length).toEqual(1);
     expect(normalItems.length).toEqual(1);
+
+    expect(criticalItems[0]).toHaveTextContent("get shorty");
+    expect(normalItems[0]).toHaveTextContent("kill bill");
   });
 
   it("parses point input in the task name", () => {
