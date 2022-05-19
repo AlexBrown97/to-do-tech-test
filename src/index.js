@@ -3,9 +3,12 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 
-const store = (tasks, newTask) => {
-  window.localStorage.tasks = JSON.stringify(tasks);
-  window.localStorage.newTask = JSON.stringify(newTask);
+const store = (tasks) => {
+  try {
+    window.localStorage.tasks = JSON.stringify(tasks);
+  } catch (e) {
+    console.error("Could not save tasks, localstorage not avaialble");
+  }
 };
 
 const retrieve = (key) => {

@@ -18,15 +18,16 @@ import TextField from "@mui/material/TextField";
 
 import "./App.css";
 
-const App = ({ initialTasks, initialNewTask, onState }) => {
-const App = ({ initialTasks = [], initialNewTask, onState }) => {
+const App = ({ initialTasks = [], onState }) => {
   const [tasks, setTasks] = useState(initialTasks);
-  const [newTask, setNewTask] = useState(initialNewTask);
+  const [newTask, setNewTask] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const newTasks = [...tasks, { name: newTask }];
     setTasks(newTasks);
+    onState?.(newTasks);
+
     setNewTask("");
   };
 
@@ -35,14 +36,11 @@ const App = ({ initialTasks = [], initialNewTask, onState }) => {
   };
 
   const deleteItem = (index) => (event) => {
+    event.preventDefault();
     const taskList = [...tasks];
     taskList.splice(index, 1);
     setTasks(taskList);
   };
-
-  useEffect(() => {
-    onState?.(tasks, newTask);
-  }, [tasks, newTask]);
 
   return (
     <Container maxWidth="sm">
@@ -53,18 +51,8 @@ const App = ({ initialTasks = [], initialNewTask, onState }) => {
           </Typography>
           <Stack spacing={2}>
             <form onSubmit={handleSubmit} id="addtask">
-              <TextField
-                id="newTask"
-                label="Name"
-                value={newTask}
-                onChange={handleChange}
-              />
-              <Button
-                type="submit"
-                aria-label="Add"
-                color="primary"
-                startIcon={<AddIcon />}
-              >
+              <TextField label="Name" value={newTask} onChange={handleChange} />
+              <Button type="submit" color="primary" startIcon={<AddIcon />}>
                 Add
               </Button>
             </form>
@@ -74,7 +62,11 @@ const App = ({ initialTasks = [], initialNewTask, onState }) => {
                 <ListItem key={`${task.name}-${i}`}>
                   <ListItemText primary={task.name} />
                   <ListItemSecondaryAction>
-                    <IconButton aria-label="Delete" onClick={deleteItem(i)}>
+                    <IconButton
+                      type="button"
+                      aria-label="Delete"
+                      onClick={deleteItem(i)}
+                    >
                       <DeleteIcon />
                     </IconButton>
                   </ListItemSecondaryAction>
