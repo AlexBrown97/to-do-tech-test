@@ -1,86 +1,84 @@
-import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import TextField from '@material-ui/core/TextField';
-import './App.css';
+import React, { useEffect, useState } from "react";
 
-export default class App extends Component {
-  state = Object.assign({
-      newTask: '',
-      tasks: []
-  }, this.props.initialState);
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import Divider from "@mui/material/Divider";
+import Container from "@mui/material/Container";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
+import ListItemText from "@mui/material/ListItemText";
+import TextField from "@mui/material/TextField";
 
-  componentWillUpdate = this.props.onState || undefined;
+import "./App.css";
 
-  handleChange = key => event => {
-    this.setState({ [key]: event.target.value });
+const App = ({ initialTasks = [], onStateChange }) => {
+  const [tasks, setTasks] = useState(initialTasks);
+  const [newTask, setNewTask] = useState("");
+
+  const updateTasks = (updatedTasks) => {
+    setTasks(updatedTasks);
+    onStateChange?.(updatedTasks);
+
+    setNewTask("");
   };
 
-  handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    const newTasks = [
-      ...this.state.tasks,
-      { name: this.state.newTask }
-    ];
-    this.setState({ tasks: newTasks, newTask: '' });
+    updateTasks([...tasks, { name: newTask }]);
   };
 
-  deleteItem = index => event => {
-    const newTasks = [...this.state.tasks];
-    newTasks.splice(index, 1);
-    this.setState({
-      tasks: newTasks,
-    });
+  const handleChange = (event) => {
+    setNewTask(event.target.value);
   };
 
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">TODO</h1>
-        </header>
-        <form onSubmit={this.handleSubmit} id="addtask">
-          <TextField
-            id="newTask"
-            label="Name"
-            value={this.state.newTask}
-            onChange={this.handleChange('newTask')}
-          />
-          <Button type="submit" aria-label="Add" color="primary">
-            <AddIcon /> Add
-          </Button>
-        </form>
-        <Grid container spacing={16}>
-          <Grid item xs={3}>
-          </Grid>
-          <Grid item xs={6}>
+  const handleDeleteItem = (index) => (event) => {
+    event.preventDefault();
+    updateTasks([...tasks].splice(index, 1));
+  };
+
+  return (
+    <Container maxWidth="sm">
+      <Card sx={{ minWidth: 275 }}>
+        <CardContent>
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+            TODO
+          </Typography>
+          <Stack spacing={2}>
+            <form onSubmit={handleSubmit} id="addtask">
+              <TextField label="Name" value={newTask} onChange={handleChange} />
+              <Button type="submit" color="primary" startIcon={<AddIcon />}>
+                Add
+              </Button>
+            </form>
+            <Divider />
             <List component="nav">
-              {this.state.tasks.map((task, i) =>
-                <div key={i} >
-                  <ListItem button>
-                    <ListItemText primary={task.name} />
-                    <ListItemSecondaryAction>
-                      <IconButton
-                        aria-label="Delete"
-                        onClick={this.deleteItem(i)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                </div>
-              )}
+              {tasks.map((task, i) => (
+                <ListItem key={`${task.name}-${i}`}>
+                  <ListItemText primary={task.name} />
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      type="button"
+                      aria-label="Delete"
+                      onClick={handleDeleteItem(i)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))}
             </List>
-          </Grid>
-        </Grid>
-      </div>
-    );
-  }
-}
+          </Stack>
+        </CardContent>
+      </Card>
+    </Container>
+  );
+};
+
+export default App;

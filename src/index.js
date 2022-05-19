@@ -1,24 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
 
-const store = (_, state) => {
-  window.localStorage.state = JSON.stringify(state);
-}
-
-const retrieve = () => {
+const store = (tasks) => {
   try {
-    return JSON.parse(window.localStorage.state);
+    window.localStorage.tasks = JSON.stringify(tasks);
   } catch (e) {
-    return {};
+    console.error("Could not save tasks, localstorage not avaialble");
   }
-}
+};
 
+const retrieve = (key) => {
+  try {
+    return JSON.parse(window.localStorage[key]);
+  } catch (e) {
+    return undefined;
+  }
+};
 
-ReactDOM.render(<App
-  initialState={retrieve()}
-  onState={store}
-  />, document.getElementById('root'));
-registerServiceWorker();
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <App initialTasks={retrieve("tasks")} onStateChange={store} />
+  </React.StrictMode>
+);
