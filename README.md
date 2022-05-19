@@ -4,7 +4,7 @@ Todo is a little app. It's based on create-react-app and material-ui.
 
 ## Setup
 
-To run this project you must have Node.js and NPM installed.
+To run this project you must have Node.js (v16+) and NPM installed.
 
 To get started, run these commands:
 
@@ -21,7 +21,7 @@ You should see three failing tests, your job is the following:
 1. Get those tests passing by implementing features described below
 2. Improve any code you think could use some love
 3. GIT commit each step
-4. Stop after 30 minutes
+4. Stop after 45 minutes
 
 Remember, we'd much rather see an incomplete response than nothing at all. Wherever you get to in the time limit, commit and push it.
 
@@ -41,7 +41,7 @@ Our users are keen to be able to add point values to tasks with a natural langua
 
 ## Design requests
 
-If you have some time, design has a few things they'd like to see changed before this goes out!
+Design has a few things they'd like to see changed before this goes out!
 
 - Centre the card vertically on the page
 - Make the TODO heading more prominant, bigger and bolder.
