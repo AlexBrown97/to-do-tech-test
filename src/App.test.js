@@ -47,8 +47,8 @@ describe("<App />", () => {
   it("parses point input in the task name", () => {
     const { container } = render(<App {...defaultProps} />);
 
-    // const items = container.getElementsByTagName("li");
-    // expect(items.length).toEqual(2);
+    const items = container.getElementsByTagName("li");
+    expect(items.length).toEqual(2);
 
     const input = container.getElementsByTagName("input")[0];
     fireEvent.change(input, { target: { value: "eat the frog 20pts" } });
@@ -56,7 +56,7 @@ describe("<App />", () => {
     const submitButton = screen.getByRole("button", { name: /Add/i });
     fireEvent.click(submitButton);
 
-    // expect(items.length).toEqual(3);
+    expect(items.length).toEqual(3);
 
     const expectedItem = { name: "eat the frog", points: 20 };
 
