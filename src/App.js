@@ -40,7 +40,9 @@ const App = ({ initialTasks = [], onStateChange }) => {
 
   const handleDeleteItem = (index) => (event) => {
     event.preventDefault();
-    updateTasks([...tasks].splice(index, 1));
+    const taskList = [...tasks];
+    taskList.splice(index, 1);
+    updateTasks(taskList);
   };
 
   return (
