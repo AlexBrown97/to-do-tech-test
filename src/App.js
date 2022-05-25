@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
@@ -40,7 +40,9 @@ const App = ({ initialTasks = [], onStateChange }) => {
 
   const handleDeleteItem = (index) => (event) => {
     event.preventDefault();
-    updateTasks([...tasks].splice(index, 1));
+    const taskList = [...tasks];
+    taskList.splice(index, 1);
+    updateTasks(taskList);
   };
 
   return (
