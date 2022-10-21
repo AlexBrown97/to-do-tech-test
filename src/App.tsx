@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { MouseEvent, useState } from "react";
 
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
@@ -18,27 +18,36 @@ import TextField from "@mui/material/TextField";
 
 import "./App.css";
 
-const App = ({ initialTasks = [], onStateChange }) => {
+export type Task = {
+  name: string;
+};
+
+export type AppProps = {
+  initialTasks: Task[];
+  onStateChange: (tasks: Task[]) => void;
+};
+
+const App = ({ initialTasks = [], onStateChange }: AppProps) => {
   const [tasks, setTasks] = useState(initialTasks);
   const [newTask, setNewTask] = useState("");
 
-  const updateTasks = (updatedTasks) => {
+  const updateTasks = (updatedTasks: Task[]) => {
     setTasks(updatedTasks);
     onStateChange?.(updatedTasks);
 
     setNewTask("");
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
     updateTasks([...tasks, { name: newTask }]);
   };
 
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTask(event.target.value);
   };
 
-  const handleDeleteItem = (index) => (event) => {
+  const handleDeleteItem = (index: number) => (event: MouseEvent) => {
     event.preventDefault();
     const taskList = [...tasks];
     taskList.splice(index, 1);
@@ -53,7 +62,7 @@ const App = ({ initialTasks = [], onStateChange }) => {
             TODO
           </Typography>
           <Stack spacing={2}>
-            <form onSubmit={handleSubmit} id="addtask">
+            <form onSubmit={handleSubmit}>
               <TextField label="Name" value={newTask} onChange={handleChange} />
               <Button type="submit" color="primary" startIcon={<AddIcon />}>
                 Add
