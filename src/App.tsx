@@ -58,7 +58,11 @@ const App = ({ initialTasks = [], onStateChange }: AppProps) => {
     <Container maxWidth="sm">
       <Card sx={{ minWidth: 275 }}>
         <CardContent>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          <Typography
+            sx={{ fontSize: 20, fontWeight: "bold" }}
+            color="text.secondary"
+            gutterBottom
+          >
             TODO
           </Typography>
           <Stack spacing={2}>
