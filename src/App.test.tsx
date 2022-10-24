@@ -1,6 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import App from "./App";
 
+jest.mock("./App.css", () => "");
+
 const defaultProps = {
   initialTasks: [
     { name: "kill bill", points: 6 },

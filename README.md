@@ -44,6 +44,6 @@ Our users are keen to be able to add point values to tasks with a natural langua
 Design has a few things they'd like to see changed before this goes out!
 
 - Centre the card vertically on the page
-- Make the TODO heading more prominant, bigger and bolder.
+- Make the TODO heading more prominent, bigger and bolder.
 - Add a light grey to the background behind the card.
 - Vertically centre align the Add button and text field.
