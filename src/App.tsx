@@ -15,11 +15,21 @@ import ListItem from "@mui/material/ListItem";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import ListItemText from "@mui/material/ListItemText";
 import TextField from "@mui/material/TextField";
+import styled from 'styled-components'
 
 import "./App.css";
 
+const StyledCard = styled.div`
+  font-size: 1.5em;
+  text-align: center;
+  position:absolute;
+  margin: auto;
+  background-color: lightgray ;
+`
+
 export type Task = {
   name: string;
+  points: number;
 };
 
 export type AppProps = {
@@ -30,21 +40,28 @@ export type AppProps = {
 const App = ({ initialTasks = [], onStateChange }: AppProps) => {
   const [tasks, setTasks] = useState(initialTasks);
   const [newTask, setNewTask] = useState("");
+  const [pointValue, setPointValue] = useState(0);
 
   const updateTasks = (updatedTasks: Task[]) => {
     setTasks(updatedTasks);
     onStateChange?.(updatedTasks);
 
     setNewTask("");
+    setPointValue(0);
   };
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    updateTasks([...tasks, { name: newTask }]);
+    updateTasks([...tasks, { name: newTask, points: pointValue }]);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTask(event.target.value);
+    if (event.target.name === "name") {
+      setNewTask(event.target.value);
+    }
+    else if(event.target.name === "points"){
+      setPointValue(Number(event.target.value));
+    }
   };
 
   const handleDeleteItem = (index: number) => (event: MouseEvent) => {
@@ -56,7 +73,7 @@ const App = ({ initialTasks = [], onStateChange }: AppProps) => {
 
   return (
     <Container maxWidth="sm">
-      <Card sx={{ minWidth: 275 }}>
+      <StyledCard sx={{ minWidth: 275 }}>
         <CardContent>
           <Typography
             sx={{ fontSize: 20, fontWeight: "bold" }}
@@ -67,7 +84,8 @@ const App = ({ initialTasks = [], onStateChange }: AppProps) => {
           </Typography>
           <Stack spacing={2}>
             <form onSubmit={handleSubmit}>
-              <TextField label="Name" value={newTask} onChange={handleChange} />
+              <TextField label="Name" name="name" value={newTask} onChange={handleChange} />
+              <TextField label="Points" name="points" value={pointValue} onChange={handleChange} />
               <Button type="submit" color="primary" startIcon={<AddIcon />}>
                 Add
               </Button>
@@ -75,8 +93,10 @@ const App = ({ initialTasks = [], onStateChange }: AppProps) => {
             <Divider />
             <List component="nav">
               {tasks.map((task, i) => (
-                <ListItem key={`${task.name}-${i}`}>
+                <ListItem className={task.points >= 10 ? "critical" : "normal"}
+                  key={`${task.name}-${i}`}>
                   <ListItemText primary={task.name} />
+                  <ListItemText primary={task.points} />
                   <ListItemSecondaryAction>
                     <IconButton
                       type="button"
@@ -91,7 +111,7 @@ const App = ({ initialTasks = [], onStateChange }: AppProps) => {
             </List>
           </Stack>
         </CardContent>
-      </Card>
+      </StyledCard>
     </Container>
   );
 };
