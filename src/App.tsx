@@ -4,7 +4,6 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
 import Container from "@mui/material/Container";
-import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
@@ -16,15 +15,16 @@ import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import ListItemText from "@mui/material/ListItemText";
 import TextField from "@mui/material/TextField";
 import styled from 'styled-components'
+import sortBy from 'lodash/sortBy'
 
 import "./App.css";
 
 const StyledCard = styled.div`
-  font-size: 1.5em;
   text-align: center;
   position:absolute;
   margin: auto;
   background-color: lightgray ;
+  min-width: 275;
 `
 
 export type Task = {
@@ -53,6 +53,7 @@ const App = ({ initialTasks = [], onStateChange }: AppProps) => {
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
     updateTasks([...tasks, { name: newTask, points: pointValue }]);
+    sortBy(tasks, [pointValue])
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,11 +73,11 @@ const App = ({ initialTasks = [], onStateChange }: AppProps) => {
   };
 
   return (
-    <Container maxWidth="sm">
-      <StyledCard sx={{ minWidth: 275 }}>
+    <Container maxWidth="sm" >
+      <StyledCard>
         <CardContent>
           <Typography
-            sx={{ fontSize: 20, fontWeight: "bold" }}
+            sx={{ fontSize: 30, fontWeight: "bold" }}
             color="text.secondary"
             gutterBottom
           >
@@ -92,7 +93,8 @@ const App = ({ initialTasks = [], onStateChange }: AppProps) => {
             </form>
             <Divider />
             <List component="nav">
-              {tasks.map((task, i) => (
+              {tasks.sort((a, b) => b.points > a.points ? 1 : -1)
+                .map((task, i) => (
                 <ListItem className={task.points >= 10 ? "critical" : "normal"}
                   key={`${task.name}-${i}`}>
                   <ListItemText primary={task.name} />
